@@ -28,6 +28,67 @@ Use Waldo to spot the lead quickly and quietly. Use broader tools such as
 WinPEAS or LinPEAS when you want exhaustive coverage after you know where to
 look.
 
+## What Waldo Surfaces
+
+Waldo is designed to surface local facts that are unusually useful in an OSCP
+style enumeration pass. It does not try to prove exploitation; it identifies
+manual-review leads and preserves enough context to decide what to inspect next.
+
+Conceptually, Waldo looks for:
+
+- Identity and privilege context: current user, elevation state, token
+  privileges, groups, account policy, local/domain role, and whether the current
+  context changes what matters.
+- User and session anomalies: admin-like users, service-like users, UID/root or
+  administrator outliers, active privileged sessions, readable home/profile
+  material, and denied paths worth revisiting after privilege changes.
+- Filesystem anomalies: non-stock application/data roots, custom tools,
+  scripts, binaries, writable files, writable directories, backup material,
+  staged loot, and operator-created artifacts that should not be confused with
+  target evidence.
+- Execution paths: services, scheduled jobs, timers, cron, startup entries,
+  autoruns, shell initialization, WMI/event consumers, service registry/config
+  settings, unquoted paths, writable execution targets, missing helpers,
+  replaceable helpers, and DLL/library search-order conditions.
+- Privilege primitives: writable privileged code paths, interesting SUID/SGID or
+  capability-bearing binaries, dangerous sudo/doas rules, token privileges,
+  install/persistence policies, service-control opportunities, NFS/export
+  mistakes, and other local conditions that may become code execution as a more
+  privileged identity.
+- Process and network context: listeners, non-standard ports, process owners,
+  process paths, service identities, local database listeners, routing facts,
+  forwarding state, dual-homed/pivot hints, and saved endpoints that may matter
+  only from this host.
+- Web and application leads: webroots, served directories, writable served
+  content, framework/CMS fingerprints, app configuration, source-code wiring,
+  exposed repository metadata, upload/sync paths, application backups, schema
+  files, and files that may be remotely reachable because they sit under served
+  content.
+- Credential-shaped material: config files, environment files, connection
+  strings, DB credentials, API keys, tokens, private keys, VPN/RDP/session files,
+  shell histories, dotfiles, browser/session vaults, password-manager vaults,
+  VNC records, SNMP/community strings, deployment profiles, and files whose names
+  imply credentials even when their contents do not match a simple regex.
+- Offline credential sources: readable local hash stores, registry hive backups,
+  SECURITY/LSA material, domain database copies, backup images, database files,
+  credential-store databases, and mounted or already-pulled filesystem roots.
+- Provisioning and build artifacts: answer files, guest-agent/cloud-init style
+  logs, setup/install traces, deployment leftovers, templated credentials, and
+  image-reuse clues.
+- Objective files: local/proof/flag-style files, access-denied objectives,
+  mounted-root objective discoveries, and coverage facts that distinguish a true
+  negative from a partial or denied search.
+- Correlated leads: relationships such as credential config plus matching local
+  database listener, writable path plus privileged consumer, denied objective
+  plus local privilege primitive, saved endpoint plus reachable segment, and
+  role-specific evidence that changes lead priority.
+- Collection context after elevation: what to collect once admin/root/SYSTEM is
+  already obtained, including local secrets, hashes, service credentials, saved
+  sessions, DPAPI/session material, tickets, hives, databases, logs, and flags.
+- Output quality signals: ranked leads, credential provenance and scope hints,
+  duplicate suppression, access-denied accounting, collector skip/error/timeout
+  reporting, and optional structured JSON.
+
 ## Quick Start
 
 Windows:
@@ -98,15 +159,20 @@ ad
 - Host, token, privilege, integrity, and elevation context
 - Local users, administrators, active sessions, and account policy
 - Domain context and read-only AD outbound-right review
-- Non-standard filesystem locations and writable paths
-- Services, service ACLs, unquoted paths, and writable binaries
-- Processes, listeners, and process path anomalies
+- Non-standard filesystem, app/data, backup, and writable-path anomalies
+- Services, service ACLs, unquoted paths, DLL search-order evidence, and
+  writable or replaceable execution targets
+- Processes, listeners, process owners, route/forwarding facts, and path
+  anomalies
 - Autoruns, scheduled tasks, startup folders, WMI persistence, IFEO, AppInit,
   and LSA persistence indicators
-- Webroots, web-served artifacts, provisioning logs, unattend files, and app
-  configuration leads
-- Credential-shaped files, registry hives, saved sessions, VNC artifacts, and
+- Web/app roots, served artifacts, app source/configuration leads, exposed
+  repository metadata, upload/sync clues, and web-stack execution identity
+- Credential-shaped files, deployment/provisioning artifacts, registry hives,
+  domain database copies, saved sessions, VNC artifacts, local DB evidence, and
   credential provenance
+- Post-admin/SYSTEM collection guidance for hives, LSA/service secrets, saved
+  sessions, local databases, tickets, DPAPI-adjacent material, and flags
 - Flag/objective search with coverage reporting
 - Optional JSON output with lead, coverage, artifact, and abort metadata
 
@@ -133,14 +199,20 @@ reuse decoded values.
 
 - Host, identity, sudo, group, and login-user context
 - UID 0 accounts, service accounts with shells, and readable hash stores
-- Odd filesystem roots, `/opt`, `/srv`, temp drops, and writable paths
+- Odd filesystem roots, app/data roots, temp drops, backup material, and
+  writable paths
 - SUID/SGID and capability anomalies against conservative baselines
-- systemd units, timers, cron entries, and writable execution targets
+- systemd units, timers, cron entries, shell startup paths, sourced helpers, and
+  writable or replaceable execution targets
 - Processes, listeners, non-standard ports, and path anomalies
-- Webroots, staged artifacts, app configs, and credential-shaped files
-- SSH material, shell history, dotfiles, saved endpoints, and per-home access
-  mapping
-- Mounted-root and loot-folder triage for already-pulled target files
+- Web/app roots, served artifacts, app configs, source-code wiring, exposed
+  repository metadata, backup images, and credential-shaped files
+- SSH material, shell history, dotfiles, saved endpoints, cloud/tool
+  credentials, browser/session vaults, and per-home access mapping
+- Local database listener/config correlations, routing/pivot facts, service
+  identities, and saved-endpoint relationships
+- Mounted-root and loot-folder triage for already-pulled target files, including
+  Windows hive/domain-database artifacts and Linux hash/config/secret material
 - Optional JSON output with coverage and lead metadata
 
 Optional Linux arguments:
