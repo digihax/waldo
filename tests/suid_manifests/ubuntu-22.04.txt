@@ -1,0 +1,8 @@
+chfn
+chsh
+gpasswd
+mount
+newgrp
+passwd
+su
+umount

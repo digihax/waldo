@@ -1,0 +1,8 @@
+# Waldo release manifest -- detached SHA-256 of the shipped enumerators.
+# Verify BEFORE running on an engagement:
+#   Linux:    sha256sum -c RELEASE_MANIFEST.sha256   (run from the waldo/ dir)
+#   Windows:  (Get-FileHash waldo.ps1 -Algorithm SHA256).Hash  -- compare to the line below
+# Build: waldo 2.20 / schema 1 / 2026-08-23.
+# bytes: waldo.sh=171522  waldo.ps1=265192
+d8b0aa5144f22370029e9d00e3f493f8c7dcd3f28d5014dfc0bbf3f744d06e25  waldo.sh
+b18d6d85be2481265fdbc476457e25fc6ad20c798f89cc8bf8b699c343adf5e6  waldo.ps1

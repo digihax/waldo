@@ -1,0 +1,13 @@
+*.bak
+*.tmp
+*.log
+*.out
+*.err
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
