@@ -4,19 +4,17 @@ Waldo is an OSCP-oriented Windows/Linux enumeration tool that compares local
 observations with conservative host baselines and ranks leads for manual review.
 It helps answer **what stands out on this host, and why is it worth investigating?**
 
-Two standalone scripts: PowerShell for Windows and Bash for Linux. No installed
-agent, service, or AI backend is required. Waldo gathers evidence for an operator;
-it does not exploit findings or reuse discovered credentials to log in to services.
+Waldo is two standalone scripts: PowerShell for Windows and Bash for Linux. It
+gathers evidence and leaves investigation to the operator; there is no installed
+agent, service or backend.
 
 **“Where's the thing that doesn't belong?”** is the practical question behind
 Waldo. It looks for files, services, users, paths and other artifacts outside a
 conservative Windows or Linux installation, then ranks them for investigation.
-That approach is especially useful in training labs. It may also help on servers,
-but has not been broadly validated there and is likely less useful on heavily
-customized production workstations, where legitimate software adds baseline noise.
+That approach is especially useful in training labs and can also help on servers.
+Heavily customized production workstations tend to add more baseline noise.
 
-The author used Waldo without issue during a successful OSCP exam attempt in
-summer 2026. That is one real-world use, not an exam-policy or compatibility claim.
+I used Waldo during my successful OSCP attempt in 2026.
 
 [Quick start](#quick-start) · [Workflow](#workflow-and-modes) ·
 [Output](#interpreting-output) · [Requirements](#requirements) ·
@@ -98,22 +96,20 @@ lab findings were staged for the capture and removed afterward; the username and
 demo paths are sanitized, and content values were suppressed with `-NoContent`._
 
 The footer combines ranked leads with coverage and collector skip/error details.
-Scores prioritize review; they are **not** vulnerability confirmations or
-probabilities. Check the cited path, consumer and current permissions manually.
-Partial coverage, timeouts and interruptions must not be interpreted as clean runs.
+Scores set the review order; they do not confirm vulnerabilities. Check the cited
+path, consumer and current permissions manually. Treat partial coverage, timeouts
+and interruptions as incomplete runs.
 
 Reports can contain sensitive evidence. `-NoContent`/`--no-content` reduces content
-inspection but is not a universal redaction mode. Review console, text and JSON
-before sharing; JSON is not guaranteed to be a complete or secret-free inventory.
+inspection, but review console, text and JSON output before sharing.
 
 ## Requirements
 
 - **Windows:** Windows PowerShell and available Windows/.NET APIs. Focused logic
-  tests were checked with Windows PowerShell 5.1 and PowerShell 7 on Windows;
-  that does not certify every Windows version, update or server role.
+  tests run under Windows PowerShell 5.1 and PowerShell 7.
 - **Linux:** Bash and utilities such as `find`, `grep`, `sed`, `awk`, `stat` and
-  `sort`. Additional commands such as `getcap`, `ss`, `timeout`, `openssl` and
-  document readers enable specific checks. It is not dependency-free.
+  `sort`. Specific checks also use `getcap`, `ss`, `timeout`, `openssl` and
+  document readers when available.
 - Missing tools or permissions reduce coverage. Check the recorded outcomes;
   a missing finding does not prove that a check ran successfully.
 
@@ -140,17 +136,14 @@ before sharing; JSON is not guaranteed to be a complete or secret-free inventory
 - Existing report writers have limited failure signaling. A success line alone is
   not proof of a complete saved report; validate the file. Unusual control bytes
   in source data may also affect Linux JSON serialization.
-- OSCP-oriented does not mean approved by an exam provider. Check current exam
-  rules independently before use.
+- Check current exam rules before using Waldo in an exam environment.
 
 ## Validation
 
 See [tests/README.md](tests/README.md) for commands, test boundaries and detached
-manifest verification. Synthetic fixtures do not establish live-host coverage.
-
-The maintenance pass verified 192 Linux fixture assertions, seven Linux release
-checks and focused Windows logic suites. Full live-host/domain and distribution
-matrix validation remain separate from those results.
+manifest verification. The maintenance pass verified 192 Linux fixture assertions,
+seven Linux release checks and focused Windows logic suites. Live-host, domain and
+distribution testing remains separate.
 
 ## Contributing and license
 
