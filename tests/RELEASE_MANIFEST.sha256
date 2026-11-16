@@ -3,6 +3,6 @@
 #   Linux:    sha256sum -c RELEASE_MANIFEST.sha256   (run from the waldo/ dir)
 #   Windows:  (Get-FileHash waldo.ps1 -Algorithm SHA256).Hash  -- compare to the line below
 # Build: waldo 2.20 / schema 1 / 2026-08-23.
-# bytes: waldo.sh=171522  waldo.ps1=265250
+# bytes: waldo.sh=171522  waldo.ps1=265386
 d8b0aa5144f22370029e9d00e3f493f8c7dcd3f28d5014dfc0bbf3f744d06e25  waldo.sh
-8d1057c9d796cbd1366ca6c28ba9356319cdb5ede9ea795c25c8205e1c742199  waldo.ps1
+d813e885b6c67aeb9428ec1e154ede9797545cd8d7d918d2e9a3fcd161260c48  waldo.ps1

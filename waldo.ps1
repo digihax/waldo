@@ -2697,7 +2697,9 @@ function Emit-VncDecode($origin,$scope,$blob){
 # v0.34 A5: full role model -- server / viewer / installed_only / unknown, with local process/service attribution for a
 #           listener and hypothesis-only handling for an unattributed port. All read-only; Waldo never connects.
 $vncServerProc = @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match '(?i)^(winvnc|uvnc_service|tvnserver|vncserver|x11vnc)' })
-$vncServerSvc  = @(Get-Service -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '(?i)vnc' -and $_.Status -eq 'Running' })
+# Use the same CIM inventory as the service collector. Hardened hosts may deny
+# low-privilege access to ServiceController and make Get-Service terminate.
+$vncServerSvc  = @(Get-Cim Win32_Service | Where-Object { $_.Name -match '(?i)vnc' -and $_.State -eq 'Running' })
 $vncViewerProc = @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match '(?i)^(vncviewer|tvnviewer|uvnc_.*viewer|ssvncviewer)' })
 # Listener attribution: any local LISTEN on the VNC port range, mapped to its owning process (read-only).
 $vncListeners = @()

@@ -67,5 +67,14 @@ $rvecs = @(
   @{ a=$false; v=$false; i=$false; role='unknown'; act='unknown';        why='nothing / unattributed listener -> no server claim (hypothesis is a separate lead)' }
 )
 foreach($rv in $rvecs){ $r=Classify-VncRole $rv.a $rv.v $rv.i; if($r.role -eq $rv.role -and $r.activity -eq $rv.act){$pass++;"PASS  role[a=$($rv.a),v=$($rv.v),i=$($rv.i)] -> $($r.role)/$($r.activity) ($($rv.why))"}else{$fail++;"FAIL  role[a=$($rv.a),v=$($rv.v),i=$($rv.i)] -> $($r.role)/$($r.activity) expected $($rv.role)/$($rv.act)"} }
+# A hardened host can deny a low-privilege token access to ServiceController.
+# The production VNC probe must use Waldo's existing CIM service inventory so
+# that denial cannot abort every collector that follows it.
+$waldoSource = Get-Content (Join-Path $PSScriptRoot '..\waldo.ps1') -Raw
+if ($waldoSource.Contains('$vncServerSvc  = @(Get-Cim Win32_Service')) {
+  $pass++; 'PASS  production VNC service probe uses low-privilege-safe CIM inventory'
+} else {
+  $fail++; 'FAIL  production VNC service probe bypasses the CIM inventory'
+}
 "";"KAT RESULT: $pass passed, $fail failed"
 if($fail){ exit 1 } else { exit 0 }
