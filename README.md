@@ -8,6 +8,16 @@ Two standalone scripts: PowerShell for Windows and Bash for Linux. No installed
 agent, service, or AI backend is required. Waldo gathers evidence for an operator;
 it does not exploit findings or reuse discovered credentials to log in to services.
 
+**“Where's the thing that doesn't belong?”** is the practical question behind
+Waldo. It looks for files, services, users, paths and other artifacts outside a
+conservative Windows or Linux installation, then ranks them for investigation.
+That approach is especially useful in training labs. It may also help on servers,
+but has not been broadly validated there and is likely less useful on heavily
+customized production workstations, where legitimate software adds baseline noise.
+
+The author used Waldo without issue during a successful OSCP exam attempt in
+summer 2026. That is one real-world use, not an exam-policy or compatibility claim.
+
 [Quick start](#quick-start) · [Workflow](#workflow-and-modes) ·
 [Output](#interpreting-output) · [Requirements](#requirements) ·
 [Limits](#operating-behavior-and-limitations) · [Tests](#validation) ·
