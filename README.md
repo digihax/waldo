@@ -79,6 +79,14 @@ be overwritten. Verify report existence, size and JSON validity after collection
 | `[x]` | Access denied or a coverage gap |
 | `[i]` | Supporting context |
 
+### Example ranked output
+
+![Waldo ranked findings from an authenticated Windows lab session](docs/images/windows-goad-ranked-leads.png)
+
+_Rendered report view from an authenticated GOAD Windows Server 2019 run. The
+lab findings were staged for the capture and removed afterward; the username and
+demo paths are sanitized, and content values were suppressed with `-NoContent`._
+
 The footer combines ranked leads with coverage and collector skip/error details.
 Scores prioritize review; they are **not** vulnerability confirmations or
 probabilities. Check the cited path, consumer and current permissions manually.
